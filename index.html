@@ -8,7 +8,7 @@
   body { font-family: "Poppins", Arial, sans-serif; margin: 20px; background:#fff; color:#000; }
   h1 { text-align:center; font-size:28px; margin-bottom:15px;}
   table{border-collapse:collapse;width:100%;margin:15px 0;background:#fff;border:1px solid #000;}
-  th,td{border:1px solid #000;padding:8px 10px;text-align:left;font-size:14px;position:relative;}
+  th,td{border:1px solid #000;padding:8px 10px;text-align:left;font-size:14px;}
   th{background:#000;color:#fff;text-transform:uppercase;cursor:pointer;}
   tr:nth-child(even){background:#f0f0f0}
   .form{border:1px solid #000;padding:12px;background:#fff;border-radius:8px;margin-top:10px}
@@ -16,16 +16,12 @@
   .form button{background:#000;color:#fff;border:none;padding:6px 10px;border-radius:4px;cursor:pointer;margin:5px}
   .hidden{display:none}
   .footer{text-align:center;margin-top:30px;color:#555;font-style:italic}
-  .dropdown { display:none; position:absolute; background:#fff; border:1px solid #000; border-radius:4px; top:100%; left:0; z-index:10; padding:5px; max-height:200px; overflow:auto; width:150px;}
-  .dropdown label { display:block; font-size:13px; cursor:pointer; margin:3px 0; color:#000; }
-  .filter-arrow::after { content:"▼"; font-size:10px; margin-left:6px; color:#fff; }
   @media (max-width:768px){table,th,td{font-size:12px}.form input,button{width:100%;display:block}}
   .summary-chart { display:flex; gap:20px; flex-wrap:wrap; align-items:flex-start; }
   .summary-chart > .box { flex:1; min-width:300px; background:transparent; }
   @keyframes breathe { 0%, 100% {transform: scale(1);} 50% {transform: scale(1.05);} }
   .breathing-logo { animation: breathe 2s ease-in-out infinite; height:90px; width:auto; }
 </style>
-
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 <body>
@@ -35,6 +31,7 @@
   position:fixed; top:0; left:0; width:100%; height:100%;
   background:#fff; display:flex; justify-content:center; align-items:center;
   z-index:9999; flex-direction:column;">
+  <img src="https://i.ibb.co/7d19gQ0h/logo.png" class="breathing-logo" alt="Loading Logo" style="max-height:120px; margin-bottom:15px;">
   <p style="font-size:18px; font-weight:600;">Loading...</p>
 </div>
 
@@ -49,6 +46,7 @@
          style="max-height:100px; width:auto;">
   </a>
 </div>
+
 <!-- Top Control Bar -->
 <div style="margin-bottom:15px; display:flex; justify-content:space-between; align-items:center;">
   <div>
@@ -57,12 +55,10 @@
       <input type="password" id="loginPw" placeholder="Password">
       <button onclick="login()">Login</button>
     </span>
-
     <span id="adminBox" class="hidden">
       <button onclick="logout()">Logout</button>
     </span>
   </div>
-
   <div style="display:flex; align-items:center; gap:10px;">
     <div id="passwordBox" style="text-align:right;">
       <label style="font-weight:600;">
@@ -79,6 +75,7 @@
   </div>
 </div>
 
+<!-- Admin Panel -->
 <div id="editor" class="form hidden">
   <h4>⚙️ ADMIN PANEL</h4>
   <label>IQAMA: <input id="f_iq"></label>
@@ -93,14 +90,13 @@
   <button onclick="addWorker()">Add Worker</button>
   <button onclick="deleteWorkerPrompt()">Delete Worker</button>
   <div id="msg" style="color:green;margin-top:8px;font-weight:600;"></div>
+
   <h4>📤 Export Workers</h4>
   <button onclick="exportCSV()">Export Workers CSV</button>
-  <p style="font-size:12px;color:#555">
-    CSV Format: iq,name,camp,company,gender,nationality,sponsor,room
-  </p>
+  <p style="font-size:12px;color:#555">CSV Format: iq,name,camp,company,gender,nationality,sponsor,room</p>
 
   <div id="masterHiddenSection" class="hidden" style="margin-top:20px;">
-    <h4> Manage Camps</h4>
+    <h4>Manage Camps</h4>
     <input id="newCampName" placeholder="Enter Camp Name">
     <button onclick="addNewCamp()">Add Camp</button>
     <button onclick="deleteCamp()">Delete Camp</button>
@@ -117,6 +113,7 @@
   </div>
 </div>
 
+<!-- Camp selection -->
 <h2>Select Camp</h2>
 <div style="margin:10px 0;">
   <label>Camp:
@@ -125,15 +122,18 @@
   <button onclick="showSelectedCamp()">Show Camp</button>
 </div>
 
+<!-- Search Box -->
 <div class="search-box">
   <h3>🔍 Search Worker by IQAMA</h3>
   <input type="text" id="searchIqama" placeholder="Enter IQAMA Number">
   <button onclick="searchByIqama()">Search</button>
   <div id="searchResult" style="margin-top:10px;"></div>
 </div>
+
+<!-- Summary Charts -->
 <div class="summary-chart" style="margin-top:12px;">
   <div id="clientSummaryBox" class="box">
-    <h2> Client / Company Summary</h2>
+    <h2>Client / Company Summary</h2>
     <div style="margin-bottom:10px;">
       <label>Filter by Company:
         <select id="filterCompany" onchange="renderClientSummary()">
@@ -144,7 +144,7 @@
     <div id="clientSummary"></div>
   </div>
   <div id="clientChartBox" class="box">
-    <h2> Worker Count Graph</h2>
+    <h2>Worker Count Graph</h2>
     <canvas id="clientChart" height="300"></canvas>
   </div>
 </div>
@@ -158,7 +158,12 @@
 <div class="footer">Made with ❤️ by <span>Faizan Khan</span></div>
 
 <script>
-// Your JS logic here
+// Hide loading screen after page load
+window.addEventListener("load", function() {
+  document.getElementById("loadingScreen").style.display = "none";
+});
+
+// Your JS functions here: login(), logout(), verifyMaster(), addWorker(), deleteWorkerPrompt(), exportCSV(), importCSV(), renderClientSummary(), showSelectedCamp()
 </script>
 </body>
 </html>
