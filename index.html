@@ -5,22 +5,17 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 <title>MFK Riyadh Accommodation</title>
 <style>
-  body { font-family: "Poppins", Arial, sans-serif; margin: 20px; background:#fff; color:#000; }
-  h1 { text-align:center; font-size:28px; margin-bottom:15px; }
+  body { font-family: "Poppins", Arial,sans-serif; margin:20px; background:#fff; color:#000; }
+  h1, h2 { text-align:center; margin-bottom:15px; }
   table{border-collapse:collapse;width:100%;margin:15px 0;background:#fff;border:1px solid #000;}
   th,td{border:1px solid #000;padding:8px 10px;text-align:left;font-size:14px;}
-  th{background:#000;color:#fff;text-transform:uppercase;cursor:pointer;}
+  th{background:#000;color:#fff;text-transform:uppercase;}
   tr:nth-child(even){background:#f0f0f0;}
-  .form{border:1px solid #000;padding:12px;background:#fff;border-radius:8px;margin-top:10px;}
-  .form input{margin:5px;padding:6px 10px;border:1px solid #000;border-radius:4px;}
-  .form button{background:#000;color:#fff;border:none;padding:6px 10px;border-radius:4px;cursor:pointer;margin:5px;}
-  .hidden{display:none;}
-  .footer{text-align:center;margin-top:30px;color:#555;font-style:italic;}
-  @media (max-width:768px){table,th,td{font-size:12px}.form input,button{width:100%;display:block;}}
-  .summary-chart { display:flex; gap:20px; flex-wrap:wrap; align-items:flex-start; }
-  .summary-chart > .box { flex:1; min-width:300px; background:transparent; }
-  @keyframes breathe { 0%, 100% {transform: scale(1);} 50% {transform: scale(1.05);} }
+  .summary-chart { display:flex; gap:20px; flex-wrap:wrap; align-items:flex-start; justify-content:center; }
+  .summary-chart > .box { flex:1; min-width:300px; background:transparent; padding:10px; }
   .breathing-logo { animation: breathe 2s ease-in-out infinite; height:90px; width:auto; }
+  @keyframes breathe { 0%,100%{transform:scale(1);}50%{transform:scale(1.05);} }
+  .footer{text-align:center;margin-top:30px;color:#555;font-style:italic;}
 </style>
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
@@ -37,35 +32,20 @@
 
 <h1>MFK ACCOMMODATION</h1>
 
-<!-- Logo with GitHub link -->
+<!-- Logo -->
 <div style="text-align:center; margin-bottom:20px;">
-  <a href="https://github.com/faizandgreate-lang/CRM" target="_blank">
-    <img src="https://i.ibb.co/7d19gQ0h/logo.png" 
-         alt="MFK Logo" 
-         class="breathing-logo" 
-         style="max-height:100px; width:auto;">
-  </a>
+  <img src="https://i.ibb.co/7d19gQ0h/logo.png" class="breathing-logo" alt="MFK Logo" style="max-height:100px;">
 </div>
 
-<!-- Top Control Bar -->
-<div style="margin-bottom:15px; display:flex; justify-content:space-between; align-items:center;">
-  <div>
-    <span id="loginBox">
-      <input type="text" id="loginUser" placeholder="User ID">
-      <input type="password" id="loginPw" placeholder="Password">
-      <button onclick="login()">Login</button>
-    </span>
-    <span id="adminBox" class="hidden">
-      <button onclick="logout()">Logout</button>
-    </span>
+<!-- Charts -->
+<div class="summary-chart">
+  <div class="box">
+    <h2>Workers per Company</h2>
+    <canvas id="companyChart" height="300"></canvas>
   </div>
-</div>
-
-<!-- Summary Charts -->
-<div class="summary-chart" style="margin-top:12px;">
-  <div id="clientChartBox" class="box">
-    <h2>Worker Count Graph</h2>
-    <canvas id="clientChart" height="300"></canvas>
+  <div class="box">
+    <h2>Workers per Camp</h2>
+    <canvas id="campChart" height="300"></canvas>
   </div>
 </div>
 
@@ -76,87 +56,74 @@
 <div class="footer">Made with ❤️ by <span>Faizan Khan</span></div>
 
 <script>
-// Hide loading screen after page load
-window.addEventListener("load", function() {
+// Hide loading screen
+window.addEventListener("load", () => {
   document.getElementById("loadingScreen").style.display = "none";
-  generateWorkerTable();
-  startDynamicChart();
+  generateWorkers();
+  generateTable();
+  updateCharts();
+  setInterval(updateCharts, 3000); // Update charts every 3 sec
 });
 
-// Sample companies
+// Sample data
 const companies = ["I.R.C", "Rexus", "Galleria", "MFK Hospitality"];
+const camps = ["New Bawadi", "G. Bawadi", "Old Rabwa", "B. Sultan"];
+let workers = [];
 
 // Generate 100 random workers
 function generateWorkers() {
-  let workers = [];
-  for (let i = 1; i <= 100; i++) {
+  workers = [];
+  for(let i=1;i<=100;i++){
     workers.push({
-      iq: "IQ" + String(1000+i),
-      name: "Worker " + i,
-      company: companies[Math.floor(Math.random()*companies.length)]
+      iq:"IQ"+(1000+i),
+      name:"Worker "+i,
+      company:companies[Math.floor(Math.random()*companies.length)],
+      camp:camps[Math.floor(Math.random()*camps.length)]
     });
   }
-  return workers;
 }
 
-// Generate HTML table
-function generateWorkerTable() {
-  const workers = generateWorkers();
-  let html = "<table><tr><th>IQAMA</th><th>Name</th><th>Company</th></tr>";
-  workers.forEach(w => {
-    html += `<tr><td>${w.iq}</td><td>${w.name}</td><td>${w.company}</td></tr>`;
+// Generate worker table
+function generateTable() {
+  let html="<table><tr><th>IQAMA</th><th>Name</th><th>Company</th><th>Camp</th></tr>";
+  workers.forEach(w=>{
+    html+=`<tr><td>${w.iq}</td><td>${w.name}</td><td>${w.company}</td><td>${w.camp}</td></tr>`;
   });
-  html += "</table>";
+  html+="</table>";
   document.getElementById("tableWrap").innerHTML = html;
 }
 
-// Chart.js dynamic chart
-let clientChart;
-function startDynamicChart() {
-  const ctx = document.getElementById("clientChart").getContext("2d");
+// Initialize charts
+let companyChart, campChart;
+function updateCharts() {
+  const companySummary = {};
+  const campSummary = {};
+  companies.forEach(c=>companySummary[c]=0);
+  camps.forEach(c=>campSummary[c]=0);
+  workers.forEach(w=>{
+    companySummary[w.company]++;
+    campSummary[w.camp]++;
+  });
 
-  function updateChart() {
-    const workers = generateWorkers();
-    const summary = {};
-    companies.forEach(c => summary[c] = 0);
-    workers.forEach(w => summary[w.company]++);
+  const companyData = { labels:Object.keys(companySummary), datasets:[{label:'Workers', data:Object.values(companySummary), backgroundColor:['#000','#555','#999','#222']}]};
+  const campData = { labels:Object.keys(campSummary), datasets:[{label:'Workers', data:Object.values(campSummary), backgroundColor:['#000','#555','#999','#222']}]};
 
-    const data = {
-      labels: Object.keys(summary),
-      datasets: [{
-        label: 'Number of Workers',
-        data: Object.values(summary),
-        backgroundColor: ['#000','#555','#999','#222'],
-        borderColor: '#000',
-        borderWidth: 1
-      }]
-    };
-
-    if (clientChart) {
-      clientChart.data.datasets[0].data = data.datasets[0].data;
-      clientChart.update();
-    } else {
-      clientChart = new Chart(ctx, {
-        type: 'bar',
-        data: data,
-        options: {
-          responsive: true,
-          plugins: {
-            legend: { display: false },
-            title: { display: true, text: 'Workers per Company (Live)' }
-          },
-          scales: {
-            y: { beginAtZero: true, ticks: { stepSize: 5 } }
-          }
-        }
-      });
-    }
+  if(companyChart){
+    companyChart.data.datasets[0].data = companyData.datasets[0].data;
+    companyChart.update();
+  } else {
+    const ctx = document.getElementById('companyChart').getContext('2d');
+    companyChart = new Chart(ctx,{type:'bar',data:companyData, options:{responsive:true,plugins:{legend:{display:false}}}});
   }
 
-  updateChart();
-  setInterval(updateChart, 3000); // update every 3 sec
+  if(campChart){
+    campChart.data.datasets[0].data = campData.datasets[0].data;
+    campChart.update();
+  } else {
+    const ctx = document.getElementById('campChart').getContext('2d');
+    campChart = new Chart(ctx,{type:'bar',data:campData, options:{responsive:true,plugins:{legend:{display:false}}}});
+  }
 }
 </script>
-
 </body>
 </html>
