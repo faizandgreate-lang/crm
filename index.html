@@ -6,17 +6,17 @@
 <title>MFK Riyadh Accommodation</title>
 <style>
   body { font-family: "Poppins", Arial, sans-serif; margin: 20px; background:#fff; color:#000; }
-  h1 { text-align:center; font-size:28px; margin-bottom:15px;}
+  h1 { text-align:center; font-size:28px; margin-bottom:15px; }
   table{border-collapse:collapse;width:100%;margin:15px 0;background:#fff;border:1px solid #000;}
   th,td{border:1px solid #000;padding:8px 10px;text-align:left;font-size:14px;}
   th{background:#000;color:#fff;text-transform:uppercase;cursor:pointer;}
-  tr:nth-child(even){background:#f0f0f0}
-  .form{border:1px solid #000;padding:12px;background:#fff;border-radius:8px;margin-top:10px}
-  .form input{margin:5px;padding:6px 10px;border:1px solid #000;border-radius:4px}
-  .form button{background:#000;color:#fff;border:none;padding:6px 10px;border-radius:4px;cursor:pointer;margin:5px}
-  .hidden{display:none}
-  .footer{text-align:center;margin-top:30px;color:#555;font-style:italic}
-  @media (max-width:768px){table,th,td{font-size:12px}.form input,button{width:100%;display:block}}
+  tr:nth-child(even){background:#f0f0f0;}
+  .form{border:1px solid #000;padding:12px;background:#fff;border-radius:8px;margin-top:10px;}
+  .form input{margin:5px;padding:6px 10px;border:1px solid #000;border-radius:4px;}
+  .form button{background:#000;color:#fff;border:none;padding:6px 10px;border-radius:4px;cursor:pointer;margin:5px;}
+  .hidden{display:none;}
+  .footer{text-align:center;margin-top:30px;color:#555;font-style:italic;}
+  @media (max-width:768px){table,th,td{font-size:12px}.form input,button{width:100%;display:block;}}
   .summary-chart { display:flex; gap:20px; flex-wrap:wrap; align-items:flex-start; }
   .summary-chart > .box { flex:1; min-width:300px; background:transparent; }
   @keyframes breathe { 0%, 100% {transform: scale(1);} 50% {transform: scale(1.05);} }
@@ -59,99 +59,17 @@
       <button onclick="logout()">Logout</button>
     </span>
   </div>
-  <div style="display:flex; align-items:center; gap:10px;">
-    <div id="passwordBox" style="text-align:right;">
-      <label style="font-weight:600;">
-        Password:
-        <input type="password" id="masterPw" placeholder="Enter Password"
-               style="margin-left:6px; padding:4px 8px; border:1px solid #000; border-radius:4px;">
-      </label>
-      <button onclick="verifyMaster()" 
-              style="background:#000; color:#fff; border:none; padding:5px 10px; border-radius:4px; margin-left:6px; cursor:pointer;">
-        Verify
-      </button>
-      <p id="masterMsg" style="color:green; font-weight:600; margin-top:5px;"></p>
-    </div>
-  </div>
-</div>
-
-<!-- Admin Panel -->
-<div id="editor" class="form hidden">
-  <h4>⚙️ ADMIN PANEL</h4>
-  <label>IQAMA: <input id="f_iq"></label>
-  <label>Name: <input id="f_name"></label>
-  <label>Camp: <input id="f_camp"></label>
-  <label>Company: <input id="f_company"></label>
-  <label>Gender: <input id="f_gender"></label>
-  <label>Nationality: <input id="f_nationality"></label>
-  <label>Sponsor: <input id="f_sponsor"></label>
-  <label>Room No: <input id="f_room"></label>
-  <br>
-  <button onclick="addWorker()">Add Worker</button>
-  <button onclick="deleteWorkerPrompt()">Delete Worker</button>
-  <div id="msg" style="color:green;margin-top:8px;font-weight:600;"></div>
-
-  <h4>📤 Export Workers</h4>
-  <button onclick="exportCSV()">Export Workers CSV</button>
-  <p style="font-size:12px;color:#555">CSV Format: iq,name,camp,company,gender,nationality,sponsor,room</p>
-
-  <div id="masterHiddenSection" class="hidden" style="margin-top:20px;">
-    <h4>Manage Camps</h4>
-    <input id="newCampName" placeholder="Enter Camp Name">
-    <button onclick="addNewCamp()">Add Camp</button>
-    <button onclick="deleteCamp()">Delete Camp</button>
-
-    <h4>📥 Import Workers</h4>
-    <input type="file" id="csvFile" accept=".csv">
-    <button onclick="importCSV()">Import CSV</button>
-
-    <div id="masterControls" class="hidden" style="margin-top:12px;">
-      <button onclick="addWorkerColumn()">➕ Add Column</button>
-      <button onclick="deleteWorkerColumn()">🗑 Delete Column</button>
-      <button onclick="saveWorkerColumns()">💾 Save Changes</button>
-    </div>
-  </div>
-</div>
-
-<!-- Camp selection -->
-<h2>Select Camp</h2>
-<div style="margin:10px 0;">
-  <label>Camp:
-    <select id="campSelect" onchange="showSelectedCamp()"></select>
-  </label>
-  <button onclick="showSelectedCamp()">Show Camp</button>
-</div>
-
-<!-- Search Box -->
-<div class="search-box">
-  <h3>🔍 Search Worker by IQAMA</h3>
-  <input type="text" id="searchIqama" placeholder="Enter IQAMA Number">
-  <button onclick="searchByIqama()">Search</button>
-  <div id="searchResult" style="margin-top:10px;"></div>
 </div>
 
 <!-- Summary Charts -->
 <div class="summary-chart" style="margin-top:12px;">
-  <div id="clientSummaryBox" class="box">
-    <h2>Client / Company Summary</h2>
-    <div style="margin-bottom:10px;">
-      <label>Filter by Company:
-        <select id="filterCompany" onchange="renderClientSummary()">
-          <option value="">All Companies</option>
-        </select>
-      </label>
-    </div>
-    <div id="clientSummary"></div>
-  </div>
   <div id="clientChartBox" class="box">
     <h2>Worker Count Graph</h2>
     <canvas id="clientChart" height="300"></canvas>
   </div>
 </div>
 
-<h2>Camp Summary</h2>
-<div id="campSummary"></div>
-
+<!-- Worker Table -->
 <h2>Worker Details</h2>
 <div id="tableWrap"></div>
 
@@ -161,9 +79,84 @@
 // Hide loading screen after page load
 window.addEventListener("load", function() {
   document.getElementById("loadingScreen").style.display = "none";
+  generateWorkerTable();
+  startDynamicChart();
 });
 
-// Your JS functions here: login(), logout(), verifyMaster(), addWorker(), deleteWorkerPrompt(), exportCSV(), importCSV(), renderClientSummary(), showSelectedCamp()
+// Sample companies
+const companies = ["I.R.C", "Rexus", "Galleria", "MFK Hospitality"];
+
+// Generate 100 random workers
+function generateWorkers() {
+  let workers = [];
+  for (let i = 1; i <= 100; i++) {
+    workers.push({
+      iq: "IQ" + String(1000+i),
+      name: "Worker " + i,
+      company: companies[Math.floor(Math.random()*companies.length)]
+    });
+  }
+  return workers;
+}
+
+// Generate HTML table
+function generateWorkerTable() {
+  const workers = generateWorkers();
+  let html = "<table><tr><th>IQAMA</th><th>Name</th><th>Company</th></tr>";
+  workers.forEach(w => {
+    html += `<tr><td>${w.iq}</td><td>${w.name}</td><td>${w.company}</td></tr>`;
+  });
+  html += "</table>";
+  document.getElementById("tableWrap").innerHTML = html;
+}
+
+// Chart.js dynamic chart
+let clientChart;
+function startDynamicChart() {
+  const ctx = document.getElementById("clientChart").getContext("2d");
+
+  function updateChart() {
+    const workers = generateWorkers();
+    const summary = {};
+    companies.forEach(c => summary[c] = 0);
+    workers.forEach(w => summary[w.company]++);
+
+    const data = {
+      labels: Object.keys(summary),
+      datasets: [{
+        label: 'Number of Workers',
+        data: Object.values(summary),
+        backgroundColor: ['#000','#555','#999','#222'],
+        borderColor: '#000',
+        borderWidth: 1
+      }]
+    };
+
+    if (clientChart) {
+      clientChart.data.datasets[0].data = data.datasets[0].data;
+      clientChart.update();
+    } else {
+      clientChart = new Chart(ctx, {
+        type: 'bar',
+        data: data,
+        options: {
+          responsive: true,
+          plugins: {
+            legend: { display: false },
+            title: { display: true, text: 'Workers per Company (Live)' }
+          },
+          scales: {
+            y: { beginAtZero: true, ticks: { stepSize: 5 } }
+          }
+        }
+      });
+    }
+  }
+
+  updateChart();
+  setInterval(updateChart, 3000); // update every 3 sec
+}
 </script>
+
 </body>
 </html>
